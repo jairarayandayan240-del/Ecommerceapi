@@ -20,7 +20,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode
-public class product {
+public class Product {
     
     /**
      * Unique identifier for the product.
@@ -75,7 +75,7 @@ public class product {
      * @param stockQuantity Available stock quantity
      * @param imageUrl Optional image URL
      */
-    public product(String name, String description, double price, 
+    public Product(String name, String description, double price, 
                    String category, int stockQuantity, String imageUrl) {
         this.name = name;
         this.description = description;
