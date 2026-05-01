@@ -105,3 +105,31 @@ A RESTful API backend for an e-commerce product catalog built with Spring Boot. 
 git clone <your-repository-url>
 cd ecommerce-api
 
+## Database Schema
+
+The application uses a MySQL database named `ecommerce_db`.  
+The following tables are automatically created by Hibernate:
+
+- **categories** (`id`, `name`) – stores product categories.
+- **products** (`id`, `name`, `description`, `price`, `stock_quantity`, `image_url`, `category_id`) – stores products with a foreign key to `categories`.
+
+![Populated products table](screenshots/database_populated.png)
+
+## API Endpoints (Database‑backed)
+
+All previous endpoints remain the same, but data is now persisted in a MySQL database.
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/v1/products` | List all products |
+| GET | `/api/v1/products/{id}` | Get product by ID |
+| GET | `/api/v1/products/filter?filterType=category&filterValue=Electronics` | Filter products |
+| POST | `/api/v1/products` | Create a new product |
+| PUT | `/api/v1/products/{id}` | Replace a product |
+| PATCH | `/api/v1/products/{id}` | Partially update a product |
+| DELETE | `/api/v1/products/{id}` | Delete a product |
+
+## Screenshots
+
+**Browser Console – Successful Fetch**
+![Browser console](screenshots/console_fetch.png)
