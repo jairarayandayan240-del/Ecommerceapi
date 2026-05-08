@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - E-Commerce</title>
+    <style>
+        body { font-family: Arial; max-width: 400px; margin: 50px auto; padding: 20px; }
+        input, select { width: 100%; padding: 8px; margin: 8px 0; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; background: #28a745; color: white; border: none; cursor: pointer; }
+        .error { color: red; }
+        .success { color: green; }
+    </style>
+</head>
+<body>
+    <h2>Register</h2>
+    <div id="message"></div>
+    <form id="registerForm">
+        <input type="text" id="username" placeholder="Username" required>
+        <input type="password" id="password" placeholder="Password (min 6 chars)" required minlength="6">
+        <select id="role">
+            <option value="USER">User (Shopper)</option>
+            <option value="ADMIN">Admin</option>
+        </select>
+        <button type="submit">Register</button>
+    </form>
+    <p>Already have an account? <a href="login.html">Login</a></p>
+
+    <script>
+       const API_BASE = '/api/v1/auth';
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const role = document.getElementById('role').value;
+            const msg = document.getElementById('message');
+
+            try {
+                const response = await fetch(API_BASE + '/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password, role })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    msg.className = 'success';
+                    msg.textContent = data.message + ' Redirecting to login...';
+                   setTimeout(() => window.location.href = '/login', 1500);
+                } else {
+                    msg.className = 'error';
+                    msg.textContent = data.error || 'Registration failed';
+                }
+            } catch (error) {
+                msg.className = 'error';
+                msg.textContent = 'Network error: ' + error.message;
+            }
+        });
+    </script>
+</body>
+</html>

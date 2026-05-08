@@ -1,4 +1,4 @@
- package com.ws101.senobiorayandayan.ecommerceapi.service;
+package com.ws101.senobiorayandayan.ecommerceapi.service;
 
 import com.ws101.senobiorayandayan.ecommerceapi.model.Category;
 import com.ws101.senobiorayandayan.ecommerceapi.model.Product;
@@ -21,52 +21,60 @@ public class ProductService {
         this.categoryRepository = categoryRepository;
     }
 
-    @PostConstruct
-    public void initSampleData() {
-        if (productRepository.count() == 0) {
-            Category electronics = categoryRepository.save(new Category(null, "Electronics", null));
-            Category clothing    = categoryRepository.save(new Category(null, "Clothing", null));
-            Category books       = categoryRepository.save(new Category(null, "Books", null));
-            Category home        = categoryRepository.save(new Category(null, "Home & Living", null));
+@PostConstruct
+public void initSampleData() {
+    if (productRepository.count() == 0) {
+        Category electronics = categoryRepository.save(new Category(null, "Electronics", null));
+        Category clothing    = categoryRepository.save(new Category(null, "Clothing", null));
+        Category books       = categoryRepository.save(new Category(null, "Books", null));
+        Category home        = categoryRepository.save(new Category(null, "Home & Living", null));
 
-            productRepository.save(new Product("Apple iPhone 15 Pro",
+        productRepository.save(new Product("Apple iPhone 15 Pro",
                 "Latest Apple smartphone with A17 Pro chip and titanium design",
-                1099.99, electronics, 50, "https://example.com/iphone15pro.jpg"));
-            productRepository.save(new Product("Samsung Galaxy S24 Ultra",
+                1099.99, electronics, 50, "/images/iphone 15 pro.jpg"));
+
+        productRepository.save(new Product("Samsung Galaxy S24 Ultra",
                 "Premium Android phone with AI features and S Pen",
-                1199.99, electronics, 35, "https://example.com/samsungs24.jpg"));
-            productRepository.save(new Product("Sony WH-1000XM5",
+                1199.99, electronics, 35, "/images/Samsung Galaxy S24 Ultra.jpg"));
+
+        productRepository.save(new Product("Sony WH-1000XM5",
                 "Industry-leading noise cancelling headphones",
-                399.99, electronics, 100, "https://example.com/sonyxm5.jpg"));
+                399.99, electronics, 100, "/images/Sony WH-1000XM5.jpg"));
 
-            productRepository.save(new Product("Nike Air Max 90",
+        productRepository.save(new Product("Nike Air Max 90",
                 "Classic running shoes with visible Air cushioning",
-                120.00, clothing, 200, "https://example.com/airmax90.jpg"));
-            productRepository.save(new Product("Levi's 501 Original Jeans",
+                120.00, clothing, 200, "/images/AIR+MAX+90+QS.jpg"));
+
+        productRepository.save(new Product("Levi's 501 Original Jeans",
                 "Timeless straight-fit jeans made from durable denim",
-                89.99, clothing, 150, "https://example.com/levis501.jpg"));
-            productRepository.save(new Product("The North Face Jacket",
+                89.99, clothing, 150, "/images/Levi's 501 Original Jeans.jpg"));
+
+        productRepository.save(new Product("The North Face Jacket",
                 "Water-resistant insulated jacket for cold weather",
-                249.99, clothing, 75, "https://example.com/northface.jpg"));
+                249.99, clothing, 75, "/images/The North Face Jacket.jpg"));
 
-            productRepository.save(new Product("Clean Code by Robert Martin",
+        productRepository.save(new Product("Clean Code by Robert Martin",
                 "Handbook of agile software craftsmanship",
-                45.99, books, 300, "https://example.com/cleancode.jpg"));
-            productRepository.save(new Product("Design Patterns: Elements of Reusable OO Software",
-                "Gang of Four book on classic software design patterns",
-                54.99, books, 120, "https://example.com/designpatterns.jpg"));
+                45.99, books, 300, "/images/Clean Code by Robert Martin.jpg"));
 
-            productRepository.save(new Product("Instant Pot Duo 7-in-1",
+        productRepository.save(new Product("Design Patterns: Elements of Reusable OO Software",
+                "Gang of Four book on classic software design patterns",
+                54.99, books, 120, "/images/Elements of Reusable.jpg"));
+
+        productRepository.save(new Product("Instant Pot Duo 7-in-1",
                 "Multi-use pressure cooker with 7 cooking functions",
-                89.99, home, 80, "https://example.com/instantpot.jpg"));
-            productRepository.save(new Product("Dyson V15 Vacuum",
+                89.99, home, 80, "/images/Instant Pot Duo 7-in-1.jpg"));
+
+        productRepository.save(new Product("Dyson V15 Vacuum",
                 "Powerful cordless vacuum with laser detection",
-                699.99, home, 25, "https://example.com/dysonv15.jpg"));
-            productRepository.save(new Product("Philips Hue Smart Bulbs",
+                699.99, home, 25, "/images/Dyson V15 Vacuum.jpg"));
+
+        productRepository.save(new Product("Philips Hue Smart Bulbs",
                 "Wi-Fi enabled color-changing LED bulbs (2-pack)",
-                49.99, home, 150, "https://example.com/philipshue.jpg"));
-        }
+                49.99, home, 150, "/images/Philips Hue Smart Bulbs.jpg"));
     }
+}
+
 
     public List<Product> getAllProducts() {
         return productRepository.findAll();

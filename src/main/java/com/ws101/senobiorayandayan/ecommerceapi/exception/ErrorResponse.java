@@ -20,11 +20,11 @@ public class ErrorResponse {
     /**
      * Constructs an ErrorResponse with all fields.
      * 
-     * @param timestamp When the error occurred
-     * @param status HTTP status code
-     * @param errorCode Application-specific error code
-     * @param message Human-readable error message
-     * @param path The request path that caused the error
+     * @param timestamp 
+     * @param status 
+     * @param errorCode 
+     * @param message 
+     * @param path 
      */
     public ErrorResponse(LocalDateTime timestamp, int status, String errorCode, String message, String path) {
         this.timestamp = timestamp;

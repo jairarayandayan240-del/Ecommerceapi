@@ -115,7 +115,7 @@ The following tables are automatically created by Hibernate:
 
 ![Populated products table](screenshots/database_populated.png)
 
-## API Endpoints (Database‑backed)
+## API Endpoints (Database‑backend)
 
 All previous endpoints remain the same, but data is now persisted in a MySQL database.
 
