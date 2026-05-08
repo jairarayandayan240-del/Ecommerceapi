@@ -1,135 +1,59 @@
-# E-Commerce API — Product Catalog Service
-
-A simple Spring Boot REST API that manages an in-memory product catalog. It provides CRUD operations, filtering, and basic validation.
-
-## Features
-
-- CRUD endpoints for products
-- In-memory storage (ArrayList) with counter-based IDs
-- Filtering by category, price, and name
-- Input validation and global error handling
-
-## Tech
-
-- Java 17+ (project compiles with newer JVMs)
-- Spring Boot
-- Lombok
-- Gradle
-
-## Quickstart
-
-1. Clone the repo:
-
-```bash
-git clone https://github.com/jairarayandayan240-del/Ecommerceapi.git
-cd Ecommerceapi
-```
-
-2. Build:
-
-```bash
-./gradlew.bat build
-```
-
-3. Run:
-
-```bash
-./gradlew.bat bootRun
-```
-
-4. Open API (default):
-
-- All products: http://localhost:8080/api/v1/products
-- Example: open http://localhost:8080/ (redirects to products list)
-
-## API Endpoints
-
-- GET /api/v1/products — list all products
-- GET /api/v1/products/{id} — get product by id
-- GET /api/v1/products/filter?filterType=category&filterValue=Electronics — filter products
-- POST /api/v1/products — create product (JSON body)
-- PUT /api/v1/products/{id} — replace product
-- PATCH /api/v1/products/{id} — partial update
-- DELETE /api/v1/products/{id} — delete product
-
-## Notes
-
-- This project uses in-memory storage; data resets on restart.
-- If you want `main` as default branch on GitHub, rename locally and push.
-
-If you want, I can add example curl requests or a Postman collection.
-# E-Commerce API - Product Catalog Service
+ # E-Commerce API – Secured with Spring Security
 
 ## Project Overview
 
-A RESTful API backend for an e-commerce product catalog built with Spring Boot. This API provides complete CRUD (Create, Read, Update, Delete) operations for managing products with in-memory data storage. The application demonstrates understanding of HTTP methods, status codes, headers, and REST principles.
+This is the same product catalog API from previous labs, now secured with:
+- **Session‑Based Authentication** (form login with JSESSIONID cookie)
+- **Role‑Based Access Control** (USER / ADMIN)
+- **Bean Validation** for robust input validation
+- **CSRF Protection** enabled for write operations
+- **Custom Login & Registration Pages** (Thymeleaf + static HTML)
 
-### Features
+## Security Architecture
 
-- RESTful API endpoints following HTTP standards
-- Complete CRUD operations for product management
-- In-memory data storage with `ArrayList<Product>`
-- Counter-based ID generation strategy
-- Filtering capabilities (by category, price, name)
-- Comprehensive input validation
-- Global exception handling with consistent error responses
-- Proper HTTP status codes and response headers
-- Lombok annotations to reduce boilerplate code
+- The application uses **Spring Security’s form login** with HTTP sessions.
+- Upon successful login (POST `/login`), the server creates a session and sends a `JSESSIONID` cookie.
+- The browser automatically includes this cookie on subsequent requests, authenticating the user.
+- **CSRF** protection is active for all state‑changing operations; the custom login page includes the CSRF token automatically via Thymeleaf.
+- Registration (`POST /api/v1/auth/register`) is CSRF‑free so that unauthenticated users can sign up.
+- Passwords are hashed with **BCryptPasswordEncoder** before storage.
 
-### Technology Stack
+## Validation Rules
 
-| Technology | Version | Purpose |
-|------------|---------|---------|
-| Java | 25+ | Programming language |
-| Spring Boot | 3.4.5 | Application framework |
-| Spring Web | - | REST API endpoints |
-| Lombok | - | Reduce boilerplate code |
-| Gradle/Maven | - | Build automation |
+| Entity / DTO | Field | Constraint |
+|---|---|---|
+| CreateProductDto | name | `@NotBlank` |
+| CreateProductDto | description | `@Size(max=500)` |
+| CreateProductDto | price | `@Positive` |
+| CreateProductDto | categoryName | `@NotBlank` |
+| CreateProductDto | stockQuantity | `@PositiveOrZero` |
+| Register request | username | checked manually (not blank, unique) |
+| Register request | password | checked manually (min 6 characters) |
 
-### Project Structure
+Validation errors are returned as a structured JSON response (400 Bad Request) with a list of field‑specific messages.
 
+## API Endpoints (updated for Lab 9)
 
-## Setup Instructions
-
-### Prerequisites
-
-- Java 25 or higher installed
-- Git installed
-- IDE (IntelliJ IDEA, VS Code, or Eclipse)
-- Internet connection for dependency download
-
-### Installation Steps
-
-1. **Clone the repository**
-```bash
-git clone <your-repository-url>
-cd ecommerce-api
-
-## Database Schema
-
-The application uses a MySQL database named `ecommerce_db`.  
-The following tables are automatically created by Hibernate:
-
-- **categories** (`id`, `name`) – stores product categories.
-- **products** (`id`, `name`, `description`, `price`, `stock_quantity`, `image_url`, `category_id`) – stores products with a foreign key to `categories`.
-
-![Populated products table](screenshots/database_populated.png)
-
-## API Endpoints (Database‑backend)
-
-All previous endpoints remain the same, but data is now persisted in a MySQL database.
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/v1/products` | List all products |
-| GET | `/api/v1/products/{id}` | Get product by ID |
-| GET | `/api/v1/products/filter?filterType=category&filterValue=Electronics` | Filter products |
-| POST | `/api/v1/products` | Create a new product |
-| PUT | `/api/v1/products/{id}` | Replace a product |
-| PATCH | `/api/v1/products/{id}` | Partially update a product |
-| DELETE | `/api/v1/products/{id}` | Delete a product |
+| Method | Endpoint | Auth Required | Role |
+|--------|----------|---------------|------|
+| GET | `/api/v1/products` | No | Public |
+| GET | `/api/v1/products/{id}` | No | Public |
+| GET | `/api/v1/products/filter` | No | Public |
+| POST | `/api/v1/products` | Yes | ADMIN |
+| PUT | `/api/v1/products/{id}` | Yes | ADMIN |
+| PATCH | `/api/v1/products/{id}` | Yes | ADMIN |
+| DELETE | `/api/v1/products/{id}` | Yes | ADMIN |
+| POST | `/api/v1/auth/register` | No | Public |
+| GET | `/api/v1/auth/me` | Yes | Any |
+| POST | `/login` | CSRF token | Public |
+| POST | `/logout` | CSRF token | Authenticated |
 
 ## Screenshots
 
-**Browser Console – Successful Fetch**
-![Browser console](screenshots/console_fetch.png)
+_Add your own screenshots here. Suggested images:_
+
+- **Database** – `users` and `products` tables with data (MySQL Workbench).
+- **Registration** – successful registration message.
+- **Login** – custom login page with Thymeleaf.
+- **Product Catalog** – products displayed with images and logged‑in user info.
+- **Error Handling** – validation error when submitting invalid data (e.g., negative price).

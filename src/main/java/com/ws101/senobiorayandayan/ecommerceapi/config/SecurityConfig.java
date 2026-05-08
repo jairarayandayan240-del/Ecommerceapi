@@ -35,19 +35,19 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/v1/products", "/api/v1/products/**").permitAll()
                 .requestMatchers("/api/v1/auth/**").permitAll()
-                // Allow static resources and Thymeleaf templates (served via controllers)
+                // Allow static resources and Thymeleaf templates
                 .requestMatchers("/", "/index.html", "/register.html",
                                  "/css/**", "/js/**", "/images/**").permitAll()
                 .requestMatchers("/login", "/login.html").permitAll()
-                .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
+                // Admin pages – only accessible by ADMIN (enforced by @PreAuthorize)
+                .requestMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
-    .loginPage("/login")
-    .defaultSuccessUrl("/index.html", true)
-    .permitAll()
-)
-            
+                .loginPage("/login")
+                .successHandler(new CustomAuthSuccessHandler())   // 👈 custom redirect after login
+                .permitAll()
+            )
             .logout(logout -> logout
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login?logout")
